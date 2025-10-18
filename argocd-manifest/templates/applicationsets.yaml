@@ -12,7 +12,7 @@ spec:
   preserveResourcesOnDeletion: {{ .preserveResourcesOnDeletion }}
   {{- end }}
   generators:
-    {{- toYaml .generators | nindent 4 }}
+{{ .generators | toYaml | indent 4 }}
   template:
     metadata:
       name: {{ .name }}-{{`{{.cluster}}`}}
@@ -25,14 +25,14 @@ spec:
       project: {{ default "default" .project }}
       {{- if .sources }}
       sources:
-        {{- toYaml .sources | nindent 8 }}
+{{ .sources | toYaml | indent 8 }}
       {{- end }}
       destination:
         server: {{`{{.url}}`}}
         namespace: {{ default "default" .namespace }}
       syncPolicy:
         {{- if .syncPolicy }}
-        {{- toYaml .syncPolicy | nindent 8 }}
+{{ .syncPolicy | toYaml | indent 8 }}
         {{- else }}
         automated:
           prune: true
