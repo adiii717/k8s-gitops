@@ -8,61 +8,35 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "{{ .syncWave }}"
 spec:
+  goTemplate: true
   {{- if .preserveResourcesOnDeletion }}
-  preserveResourcesOnDeletion: {{ .preserveResourcesOnDeletion }}
+  syncPolicy:
+    preserveResourcesOnDeletion: {{ .preserveResourcesOnDeletion }}
   {{- end }}
+  {{- if .generators }}
   generators:
-    {{- range .generators }}
-    - list:
-        elements:
-          {{- range .list.elements }}
-          - cluster: {{ .cluster }}
-            url: {{ .url }}
-            environment: {{ .environment }}
-            chartVersion: {{ .chartVersion }}
-          {{- end }}
-    {{- end }}
+    {{- toYaml .generators | nindent 4 }}
+  {{- end }}
   template:
     metadata:
-      name: {{ .name }}-{{`{{.cluster}}`}}
+      name: '{{ .name }}-{{`{{.cluster}}`}}'
+      namespace: {{ default "argocd" $.Values.global.argocdNamespace }}
+      {{- if not .preventDelete }}
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+      {{- end }}
       {{- if .preventDelete }}
       annotations:
-        argocd.argoproj.io/compare-options: IgnoreExtraneous
-        argocd.argoproj.io/sync-options: PruneLast=true
+        argocd.argoproj.io/sync-options: Delete=false
       {{- end }}
     spec:
       project: {{ default "default" .project }}
       {{- if .sources }}
       sources:
-        {{- range .sources }}
-        - {{- if .chart }}
-          chart: {{ .chart }}
-          {{- end }}
-          repoURL: {{ .repoURL }}
-          {{- if .chart }}
-          targetRevision: {{`"{{.chartVersion}}"`}}
-          {{- else if .targetRevision }}
-          targetRevision: {{ .targetRevision }}
-          {{- end }}
-          {{- if .ref }}
-          ref: {{ .ref }}
-          {{- end }}
-          {{- if .helm }}
-          helm:
-            {{- if .helm.releaseName }}
-            releaseName: {{ .helm.releaseName }}
-            {{- end }}
-            {{- if .helm.valueFiles }}
-            valueFiles:
-              {{- range .helm.valueFiles }}
-              - {{ . }}
-              {{- end }}
-            {{- end }}
-          {{- end }}
-        {{- end }}
+        {{- toYaml .sources | nindent 8 }}
       {{- end }}
       destination:
-        server: {{`{{.url}}`}}
+        server: '{{`{{.url}}`}}'
         namespace: {{ default "default" .namespace }}
       syncPolicy:
         {{- if .syncPolicy }}
