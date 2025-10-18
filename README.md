@@ -15,9 +15,11 @@ This repository implements a scalable GitOps workflow using:
 ```
 root-manifest (App of Apps)
     ├── devops (Project)
-    │   ├── cert-manager
-    │   ├── ingress-nginx
-    │   └── metrics-server
+    │   ├── cert-manager        # SSL/TLS certificate management
+    │   ├── ingress-nginx        # Ingress controller
+    │   ├── metrics-server       # Kubernetes metrics API
+    │   ├── signoz              # Observability platform (APM, metrics, traces)
+    │   └── k8s-infra           # Kubernetes logs & metrics collection
     └── frontend (Project)
         ├── app1
         └── app2
@@ -368,6 +370,45 @@ kubectl patch application <app-name> -n argocd \
 5. **Test Locally**: Use `helm template` to validate before committing
 6. **Document Values**: Comment your values files
 
-## License
+## Deployed Stack
 
-Created by adilm717@gmail.com for freelance projects.
+Current production applications:
+
+| Application | Purpose | Status |
+|------------|---------|--------|
+| **cert-manager** | Automatic SSL/TLS certificate management | ✅ Running |
+| **ingress-nginx** | Kubernetes ingress controller | ✅ Running |
+| **metrics-server** | Resource metrics API (CPU/Memory) | ✅ Running |
+| **signoz** | Complete observability (APM, Logs, Metrics, Traces) | ✅ Running |
+| **k8s-infra** | Kubernetes cluster logs & metrics collection | ✅ Running |
+
+### Accessing SigNoz
+
+```bash
+kubectl port-forward -n platform svc/signoz 3301:8080
+# Open: http://localhost:3301
+```
+
+## Why This Stack?
+
+**SigNoz over Prometheus/Grafana/Jaeger:**
+- ✅ Unified platform: Metrics, Logs, Traces, APM in one UI
+- ✅ Lower operational overhead: Single deployment vs 4+ tools
+- ✅ Better performance: ClickHouse is faster than traditional TSDB
+- ✅ OpenTelemetry native: Future-proof observability
+- ✅ Cost-effective: No separate storage for logs/traces/metrics
+
+---
+
+## About
+
+**Created with ❤️ by [adilm717@gmail.com](mailto:adilm717@gmail.com)**
+
+Built for freelance Kubernetes infrastructure projects. Feel free to use it, fork it, and adapt it for your needs.
+
+If you find this repository helpful:
+- ⭐ Star it on GitHub
+- 🔀 Fork it and customize for your infrastructure
+- 💬 Reach out for consulting or collaboration
+
+**Philosophy:** Clean, scalable, production-ready GitOps that's easy to understand and extend.
