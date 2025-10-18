@@ -1,0 +1,61 @@
+# SigNoz Helm Values
+# SigNoz is an open-source observability platform (APM, Metrics, Logs, Traces)
+
+# Frontend configuration
+frontend:
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# Query Service configuration
+queryService:
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# ClickHouse configuration (for metrics and traces storage)
+clickhouse:
+  replicaCount: 1
+  persistence:
+    enabled: true
+    size: 10Gi
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+# OpenTelemetry Collector configuration
+otelCollector:
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# AlertManager configuration
+alertmanager:
+  enabled: true
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi

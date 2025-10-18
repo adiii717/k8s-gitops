@@ -3,6 +3,22 @@ global:
   repoURL: git@github.com:adiii717/k8s-gitops.git
   targetRevision: main
 
+# ArgoCD Manifest Project - manages all other projects
+Projects:
+  argocd-manifest:
+    enable: true
+    syncWave: -1
+    name: argocd-manifest
+    description: Root project for managing all GitOps projects
+    clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'
+    destinations:
+      - namespace: '*'
+        server: https://kubernetes.default.svc
+    sourceRepos:
+      - '*'
+
 # Top-level Applications that manage projects
 # Each application points to a project's root.yaml
 Applications:
