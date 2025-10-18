@@ -370,4 +370,4 @@ kubectl patch application <app-name> -n argocd \
 
 ## License
 
-Internal use only.
+Created by adilm717@gmail.com for freelance projects.
