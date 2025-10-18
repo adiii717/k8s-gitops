@@ -1,6 +1,29 @@
 # K8s GitOps
 
-GitOps repository for Kubernetes application deployments using ArgoCD and Helm with App of Apps pattern.
+Production-ready GitOps repository for Kubernetes application deployments using ArgoCD and Helm with App of Apps pattern.
+
+## 🚀 Quick Start - Deploy Everything in 3 Commands
+
+Get a complete Kubernetes stack with observability in minutes:
+
+```bash
+# 1. Install ArgoCD
+cd bootstrap
+./bootstrap.sh argocd
+
+# 2. Configure GitHub Access
+./bootstrap.sh configure-github
+
+# 3. Deploy Root Manifest (deploys all applications automatically)
+kubectl apply -f argocd-manifest/root-manifest.yaml
+```
+
+**That's it!** ArgoCD will automatically deploy:
+- ✅ cert-manager (SSL/TLS certificates)
+- ✅ ingress-nginx (Ingress controller)
+- ✅ metrics-server (Resource metrics)
+- ✅ SigNoz (Complete observability: APM, Logs, Metrics, Traces)
+- ✅ k8s-infra (Kubernetes logs & metrics collection)
 
 ## Overview
 
@@ -64,32 +87,16 @@ root-manifest (App of Apps)
 
 ```
 
-## Quick Start
+## How the 3-Command Setup Works
 
-### 1. Install ArgoCD
+When you run `kubectl apply -f argocd-manifest/root-manifest.yaml`:
 
-```bash
-cd bootstrap
-./bootstrap.sh argocd
-```
-
-### 2. Configure GitHub Access
-
-```bash
-./bootstrap.sh configure-github
-```
-
-### 3. Deploy Root Manifest
-
-```bash
-kubectl apply -f argocd-manifest/root-manifest.yaml
-```
-
-This will:
-1. Deploy the `root-manifest` Application
-2. Root manifest reads `argocd-manifest/values.yaml` and creates project Applications
-3. Each project Application reads its `projects/<project>/root.yaml`
-4. Each root.yaml creates the Project and all its child Applications
+1. **Root Manifest** Application is created in ArgoCD
+2. Root manifest reads `argocd-manifest/values.yaml` and creates **Project Applications**
+3. Each Project Application reads its `projects/<project>/root.yaml`
+4. Each root.yaml creates the **AppProject** and all its **child ApplicationSets**
+5. ApplicationSets generate individual Applications for each tool
+6. ArgoCD syncs everything automatically using GitOps 🎉
 
 ## How It Works
 
