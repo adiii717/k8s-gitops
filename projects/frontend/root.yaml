@@ -1,0 +1,70 @@
+global:
+  argocdNamespace: argocd
+
+# Define the Frontend Project
+Projects:
+  frontend:
+    enable: true
+    syncWave: -1
+    name: frontend
+    description: Frontend applications and services
+    labels:
+      team: frontend
+      category: applications
+    clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'
+    destinations:
+      - namespace: '*'
+        server: https://kubernetes.default.svc
+    sourceRepos:
+      - '*'
+
+# Frontend Applications
+# Example: Deploy custom charts from charts/ directory
+Applications:
+  example-frontend-app:
+    enable: false
+    syncWave: 1
+    name: example-frontend-app
+    description: Example frontend application
+    namespace: frontend
+    project: frontend
+    sources:
+      - repoURL: git@github.com:adiii717/k8s-gitops.git
+        targetRevision: main
+        ref: values
+      - repoURL: git@github.com:adiii717/k8s-gitops.git
+        targetRevision: main
+        path: charts/example-app
+        helm:
+          releaseName: example-frontend-app
+          valueFiles:
+            - $values/projects/frontend/example-app/values.yaml
+
+# Example: Deploy from external Helm repository
+ApplicationSets:
+  nginx-demo:
+    enable: false
+    syncWave: 2
+    name: nginx-demo
+    project: frontend
+    namespace: nginx-demo
+    generators:
+      - list:
+          elements:
+            - cluster: in-cluster
+              url: https://kubernetes.default.svc
+              environment: develop
+              chartVersion: 1.21.0
+    sources:
+      - chart: nginx
+        repoURL: https://charts.bitnami.com/bitnami
+        targetRevision: '{{.chartVersion}}'
+        helm:
+          releaseName: nginx-demo
+          valueFiles:
+            - $values/projects/frontend/nginx-demo/values.yaml
+      - repoURL: git@github.com:adiii717/k8s-gitops.git
+        targetRevision: main
+        ref: values

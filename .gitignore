@@ -1,0 +1,12 @@
+# Environment and secrets
+.env
+
+# macOS
+.DS_Store
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

@@ -1,0 +1,45 @@
+{{- range $appset := .Values.ApplicationSets -}}
+{{- if .enable }}
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: {{ .name }}
+  namespace: {{ default "argocd" $.Values.global.argocdNamespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "{{ .syncWave }}"
+spec:
+  {{- if .preserveResourcesOnDeletion }}
+  preserveResourcesOnDeletion: {{ .preserveResourcesOnDeletion }}
+  {{- end }}
+  generators:
+    {{- toYaml .generators | nindent 4 }}
+  template:
+    metadata:
+      name: {{ .name }}-{{`{{.cluster}}`}}
+      {{- if .preventDelete }}
+      annotations:
+        argocd.argoproj.io/compare-options: IgnoreExtraneous
+        argocd.argoproj.io/sync-options: PruneLast=true
+      {{- end }}
+    spec:
+      project: {{ default "default" .project }}
+      {{- if .sources }}
+      sources:
+        {{- toYaml .sources | nindent 8 }}
+      {{- end }}
+      destination:
+        server: {{`{{.url}}`}}
+        namespace: {{ default "default" .namespace }}
+      syncPolicy:
+        {{- if .syncPolicy }}
+        {{- toYaml .syncPolicy | nindent 8 }}
+        {{- else }}
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        {{- end }}
+---
+{{- end }}
+{{- end }}

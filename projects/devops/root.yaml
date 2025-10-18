@@ -1,0 +1,98 @@
+global:
+  argocdNamespace: argocd
+
+# Define the DevOps Project
+Projects:
+  devops:
+    enable: true
+    syncWave: -1
+    name: devops
+    description: DevOps tools and infrastructure services
+    labels:
+      team: platform
+      category: infrastructure
+    clusterResourceWhitelist:
+      - group: '*'
+        kind: '*'
+    destinations:
+      - namespace: '*'
+        server: https://kubernetes.default.svc
+    sourceRepos:
+      - '*'
+
+# DevOps Tools Applications
+ApplicationSets:
+  cert-manager:
+    enable: true
+    syncWave: 1
+    name: cert-manager
+    project: devops
+    namespace: cert-manager
+    generators:
+      - list:
+          elements:
+            - cluster: in-cluster
+              url: https://kubernetes.default.svc
+              environment: develop
+              chartVersion: v1.13.2
+    sources:
+      - chart: cert-manager
+        repoURL: https://charts.jetstack.io
+        targetRevision: '{{.chartVersion}}'
+        helm:
+          releaseName: cert-manager
+          valueFiles:
+            - $values/projects/devops/cert-manager/values.yaml
+      - repoURL: git@github.com:adiii717/k8s-gitops.git
+        targetRevision: main
+        ref: values
+
+  ingress-nginx:
+    enable: true
+    syncWave: 2
+    name: ingress-nginx
+    project: devops
+    namespace: ingress-nginx
+    generators:
+      - list:
+          elements:
+            - cluster: in-cluster
+              url: https://kubernetes.default.svc
+              environment: develop
+              chartVersion: 4.8.3
+    sources:
+      - chart: ingress-nginx
+        repoURL: https://kubernetes.github.io/ingress-nginx
+        targetRevision: '{{.chartVersion}}'
+        helm:
+          releaseName: ingress-nginx
+          valueFiles:
+            - $values/projects/devops/ingress-nginx/values.yaml
+      - repoURL: git@github.com:adiii717/k8s-gitops.git
+        targetRevision: main
+        ref: values
+
+  metrics-server:
+    enable: true
+    syncWave: 3
+    name: metrics-server
+    project: devops
+    namespace: kube-system
+    generators:
+      - list:
+          elements:
+            - cluster: in-cluster
+              url: https://kubernetes.default.svc
+              environment: develop
+              chartVersion: 3.11.0
+    sources:
+      - chart: metrics-server
+        repoURL: https://kubernetes-sigs.github.io/metrics-server/
+        targetRevision: '{{.chartVersion}}'
+        helm:
+          releaseName: metrics-server
+          valueFiles:
+            - $values/projects/devops/metrics-server/values.yaml
+      - repoURL: git@github.com:adiii717/k8s-gitops.git
+        targetRevision: main
+        ref: values

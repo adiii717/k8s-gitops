@@ -1,0 +1,23 @@
+# Ingress-NGINX Helm Values
+
+controller:
+  replicaCount: 1
+
+  service:
+    type: LoadBalancer
+
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: false
+
+  admissionWebhooks:
+    enabled: true

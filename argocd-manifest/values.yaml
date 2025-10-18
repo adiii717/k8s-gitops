@@ -1,0 +1,45 @@
+global:
+  argocdNamespace: argocd
+  repoURL: git@github.com:adiii717/k8s-gitops.git
+  targetRevision: main
+
+# Top-level Applications that manage projects
+# Each application points to a project's root.yaml
+Applications:
+  devops:
+    enable: true
+    syncWave: 100
+    name: devops
+    description: DevOps tools and services
+    namespace: argocd
+    project: argocd-manifest
+    sources:
+      - repoURL: git@github.com:adiii717/k8s-gitops.git
+        targetRevision: main
+        ref: values
+      - repoURL: git@github.com:adiii717/k8s-gitops.git
+        targetRevision: main
+        path: argocd-manifest
+        helm:
+          releaseName: devops
+          valueFiles:
+            - $values/projects/devops/root.yaml
+
+  frontend:
+    enable: false
+    syncWave: 101
+    name: frontend
+    description: Frontend applications
+    namespace: argocd
+    project: argocd-manifest
+    sources:
+      - repoURL: git@github.com:adiii717/k8s-gitops.git
+        targetRevision: main
+        ref: values
+      - repoURL: git@github.com:adiii717/k8s-gitops.git
+        targetRevision: main
+        path: argocd-manifest
+        helm:
+          releaseName: frontend
+          valueFiles:
+            - $values/projects/frontend/root.yaml
