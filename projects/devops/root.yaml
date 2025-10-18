@@ -38,7 +38,6 @@ ApplicationSets:
     sources:
       - chart: cert-manager
         repoURL: https://charts.jetstack.io
-        targetRevision: "{{.chartVersion}}"
         helm:
           releaseName: cert-manager
           valueFiles:
@@ -63,7 +62,6 @@ ApplicationSets:
     sources:
       - chart: ingress-nginx
         repoURL: https://kubernetes.github.io/ingress-nginx
-        targetRevision: "{{.chartVersion}}"
         helm:
           releaseName: ingress-nginx
           valueFiles:
@@ -88,7 +86,6 @@ ApplicationSets:
     sources:
       - chart: metrics-server
         repoURL: https://kubernetes-sigs.github.io/metrics-server/
-        targetRevision: "{{.chartVersion}}"
         helm:
           releaseName: metrics-server
           valueFiles:
@@ -113,7 +110,6 @@ ApplicationSets:
     sources:
       - chart: signoz
         repoURL: https://charts.signoz.io
-        targetRevision: "{{.chartVersion}}"
         helm:
           releaseName: signoz
           valueFiles:

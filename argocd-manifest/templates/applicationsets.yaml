@@ -12,7 +12,16 @@ spec:
   preserveResourcesOnDeletion: {{ .preserveResourcesOnDeletion }}
   {{- end }}
   generators:
-{{ .generators | toYaml | indent 4 }}
+    {{- range .generators }}
+    - list:
+        elements:
+          {{- range .list.elements }}
+          - cluster: {{ .cluster }}
+            url: {{ .url }}
+            environment: {{ .environment }}
+            chartVersion: {{ .chartVersion }}
+          {{- end }}
+    {{- end }}
   template:
     metadata:
       name: {{ .name }}-{{`{{.cluster}}`}}
@@ -25,14 +34,39 @@ spec:
       project: {{ default "default" .project }}
       {{- if .sources }}
       sources:
-{{ .sources | toYaml | indent 8 }}
+        {{- range .sources }}
+        - {{- if .chart }}
+          chart: {{ .chart }}
+          {{- end }}
+          repoURL: {{ .repoURL }}
+          {{- if .chart }}
+          targetRevision: {{`"{{.chartVersion}}"`}}
+          {{- else if .targetRevision }}
+          targetRevision: {{ .targetRevision }}
+          {{- end }}
+          {{- if .ref }}
+          ref: {{ .ref }}
+          {{- end }}
+          {{- if .helm }}
+          helm:
+            {{- if .helm.releaseName }}
+            releaseName: {{ .helm.releaseName }}
+            {{- end }}
+            {{- if .helm.valueFiles }}
+            valueFiles:
+              {{- range .helm.valueFiles }}
+              - {{ . }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
       {{- end }}
       destination:
         server: {{`{{.url}}`}}
         namespace: {{ default "default" .namespace }}
       syncPolicy:
         {{- if .syncPolicy }}
-{{ .syncPolicy | toYaml | indent 8 }}
+        {{- toYaml .syncPolicy | nindent 8 }}
         {{- else }}
         automated:
           prune: true
