@@ -109,7 +109,7 @@ ApplicationSets:
             - cluster: in-cluster
               url: https://kubernetes.default.svc
               environment: develop
-              chartVersion: 0.47.2
+              chartVersion: 0.96.0
     sources:
       - chart: signoz
         repoURL: https://charts.signoz.io

@@ -1,4 +1,5 @@
 # Metrics Server Helm Values
+# Special config for local k8s (Docker Desktop, Minikube, etc.)
 
 replicas: 1
 
@@ -7,6 +8,7 @@ args:
   - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
   - --kubelet-use-node-status-port
   - --metric-resolution=15s
+  - --kubelet-insecure-tls  # Required for local k8s without proper TLS certs
 
 resources:
   limits:
