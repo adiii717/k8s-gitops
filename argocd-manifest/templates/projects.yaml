@@ -7,6 +7,8 @@ metadata:
   namespace: {{ default "argocd" $.Values.global.argocdNamespace }}
   annotations:
     argocd.argoproj.io/sync-wave: "{{ .syncWave }}"
+  labels:
+    app.kubernetes.io/part-of: {{ default $.Values.global.partOf .name }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:

@@ -9,10 +9,11 @@ metadata:
     argocd.argoproj.io/sync-wave: "{{ .syncWave }}"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
-  {{- if .labels }}
   labels:
+    app.kubernetes.io/managed-by: root-manifest
+    {{- if .labels }}
     {{- toYaml .labels | nindent 4 }}
-  {{- end }}
+    {{- end }}
 spec:
   project: {{ default "default" .project }}
   {{- if .sources }}
@@ -22,6 +23,21 @@ spec:
   destination:
     namespace: {{ default "default" .namespace }}
     server: {{ default "https://kubernetes.default.svc" .server }}
+  {{- if .ignoreDifferences }}
+  ignoreDifferences:
+    {{- toYaml .ignoreDifferences | nindent 4 }}
+  {{- else }}
+  ignoreDifferences:
+    - group: argoproj.io
+      kind: Application
+      name: {{ .name }}
+      jsonPointers:
+        - /status
+    - group: argoproj.io
+      kind: AppProject
+      jsonPointers:
+        - /status
+  {{- end }}
   syncPolicy:
     {{- if .syncPolicy }}
     {{- toYaml .syncPolicy | nindent 4 }}

@@ -1,5 +1,6 @@
 global:
   argocdNamespace: argocd
+  partOf: devops-project
 
 # Define the DevOps Project
 Projects:

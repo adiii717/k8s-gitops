@@ -2,6 +2,7 @@ global:
   argocdNamespace: argocd
   repoURL: git@github.com:adiii717/k8s-gitops.git
   targetRevision: main
+  partOf: root-manifest
 
 # ArgoCD Manifest Project - manages all other projects
 Projects:
