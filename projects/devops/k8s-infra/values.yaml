@@ -1,0 +1,41 @@
+# K8s Infra Helm Values
+# Collects Kubernetes logs and metrics and sends to SigNoz
+
+# Cluster name to identify the source
+clusterName: "local-k8s"
+
+# SigNoz OtelCollector endpoint (same namespace)
+otelCollectorEndpoint: signoz-otel-collector.platform.svc.cluster.local:4317
+
+# Use insecure connection for local setup
+otelInsecure: true
+
+# OpenTelemetry Collector DaemonSet configuration
+otelAgent:
+  # Resource limits for local k8s
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  # Preset configurations
+  presets:
+    # Collect logs from all pods
+    logsCollection:
+      enabled: true
+      includeCollectorLogs: false
+
+    # Collect Kubernetes attributes
+    kubernetesAttributes:
+      enabled: true
+
+    # Collect kubelet metrics
+    kubeletMetrics:
+      enabled: true
+
+    # Collect host metrics
+    hostMetrics:
+      enabled: true

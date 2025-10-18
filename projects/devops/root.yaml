@@ -122,3 +122,28 @@ ApplicationSets:
       - repoURL: git@github.com:adiii717/k8s-gitops.git
         targetRevision: main
         ref: values
+
+  k8s-infra:
+    enable: true
+    syncWave: 5
+    name: k8s-infra
+    project: devops
+    namespace: platform
+    generators:
+      - list:
+          elements:
+            - cluster: in-cluster
+              url: https://kubernetes.default.svc
+              environment: develop
+              chartVersion: 0.14.1
+    sources:
+      - chart: k8s-infra
+        repoURL: https://charts.signoz.io
+        targetRevision: '{{.chartVersion}}'
+        helm:
+          releaseName: k8s-infra
+          valueFiles:
+            - $values/projects/devops/k8s-infra/values.yaml
+      - repoURL: git@github.com:adiii717/k8s-gitops.git
+        targetRevision: main
+        ref: values
