@@ -44,8 +44,12 @@ root-manifest (App of Apps)
 │   │   │   └── values.yaml     # Cert-manager helm values
 │   │   ├── ingress-nginx/
 │   │   │   └── values.yaml     # Ingress-nginx helm values
-│   │   └── metrics-server/
-│   │       └── values.yaml     # Metrics-server helm values
+│   │   ├── metrics-server/
+│   │   │   └── values.yaml     # Metrics-server helm values
+│   │   ├── signoz/
+│   │   │   └── values.yaml     # SigNoz observability platform
+│   │   └── k8s-infra/
+│   │       └── values.yaml     # K8s logs & metrics collection
 │   └── frontend/
 │       ├── root.yaml           # Defines frontend project + all apps
 │       └── app1/
