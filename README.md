@@ -269,12 +269,19 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 ## Features
 
 ✅ **Scalable**: Add dozens of applications by just adding values files
+
 ✅ **Project-Based**: Clean separation (devops, frontend, backend, etc.)
+
 ✅ **Hierarchical**: Three-level structure (Root → Project → Application)
+
 ✅ **Version Control**: Chart versions defined in root.yaml
+
 ✅ **Enable/Disable**: Toggle entire projects or individual apps
+
 ✅ **Sync Waves**: Control deployment order with syncWave
+
 ✅ **Multiple Sources**: Support for Helm repos and Git repos
+
 ✅ **ApplicationSets**: Parameterize deployments across environments
 
 ## Advanced Features
