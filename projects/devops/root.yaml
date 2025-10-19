@@ -13,9 +13,6 @@ Projects:
     syncWave: -1
     name: devops
     description: DevOps tools and infrastructure services
-    labels:
-      team: platform
-      category: infrastructure
     clusterResourceWhitelist:
       - group: '*'
         kind: '*'
