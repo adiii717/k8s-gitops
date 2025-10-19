@@ -1,5 +1,6 @@
 # K8s Infra Helm Values
 # Collects Kubernetes logs and metrics and sends to SigNoz
+# Optimized for Docker Desktop / local k8s
 
 # Cluster name to identify the source
 clusterName: "local-k8s"
@@ -23,10 +24,11 @@ otelAgent:
 
   # Preset configurations
   presets:
-    # Collect logs from all pods
+    # Collect logs from all pods (reads /var/log/pods)
     logsCollection:
       enabled: true
       includeCollectorLogs: false
+      startAt: end
 
     # Collect Kubernetes attributes
     kubernetesAttributes:
@@ -36,6 +38,7 @@ otelAgent:
     kubeletMetrics:
       enabled: true
 
-    # Collect host metrics
+    # Disable host metrics to avoid mount propagation errors on Docker Desktop
+    # Host metrics require mounting / with shared propagation which doesn't work on macOS
     hostMetrics:
-      enabled: true
+      enabled: false
