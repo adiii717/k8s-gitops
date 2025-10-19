@@ -25,7 +25,14 @@ Projects:
     sourceRepos:
       - '*'
 
-# DevOps Tools Applications
+# Disable root-level Applications (these are managed by root-manifest)
+Applications:
+  devops:
+    enable: false
+  frontend:
+    enable: false
+
+# DevOps Tools ApplicationSets
 ApplicationSets:
   cert-manager:
     enable: true
@@ -102,15 +109,6 @@ ApplicationSets:
         targetRevision: main
         ref: values
 
-# Disable root-level Applications (these are managed by root-manifest)
-Applications:
-  devops:
-    enable: false
-  frontend:
-    enable: false
-
-# DevOps ApplicationSets
-ApplicationSets:
   signoz:
     enable: true
     syncWave: 4
