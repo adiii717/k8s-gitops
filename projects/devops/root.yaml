@@ -2,8 +2,12 @@ global:
   argocdNamespace: argocd
   partOf: devops-project
 
-# Define the DevOps Project
+# Disable root-level resources (these are managed by root-manifest)
+# Projects and Applications sections here override the chart's defaults
 Projects:
+  # Disable argocd-manifest project (managed by root-manifest)
+  argocd-manifest:
+    enable: false
   devops:
     enable: true
     syncWave: -1
@@ -98,6 +102,15 @@ ApplicationSets:
         targetRevision: main
         ref: values
 
+# Disable root-level Applications (these are managed by root-manifest)
+Applications:
+  devops:
+    enable: false
+  frontend:
+    enable: false
+
+# DevOps ApplicationSets
+ApplicationSets:
   signoz:
     enable: true
     syncWave: 4
