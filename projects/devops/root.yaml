@@ -132,7 +132,7 @@ ApplicationSets:
         ref: values
 
   k8s-infra:
-    enable: true
+    enable: false  # Disabled for Docker Desktop - mount propagation not supported
     syncWave: 5
     name: k8s-infra
     project: devops
