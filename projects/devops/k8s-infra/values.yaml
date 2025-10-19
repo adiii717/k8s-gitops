@@ -42,3 +42,8 @@ otelAgent:
     # Host metrics require mounting / with shared propagation which doesn't work on macOS
     hostMetrics:
       enabled: false
+
+  # Override extraVolumes and extraVolumeMounts to remove hostfs mount
+  # This prevents the "path / is not shared mount" error on Docker Desktop
+  extraVolumes: []
+  extraVolumeMounts: []
