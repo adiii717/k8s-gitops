@@ -1,6 +1,6 @@
 # K8s GitOps
 
-Production-ready GitOps repository for Kubernetes application deployments using ArgoCD and Helm with App of Apps pattern.
+GitOps at scale with ArgoCD App of Apps. Organize applications by projects (devops, observability, frontend, backend). Deploy internal or external Helm charts via git - just add the reference, commit, and ArgoCD syncs. Zero manual kubectl operations.
 
 ## 🚀 Quick Start - Deploy Everything in 3 Commands
 
