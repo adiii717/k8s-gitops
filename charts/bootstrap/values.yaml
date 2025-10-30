@@ -1,0 +1,32 @@
+# ArgoCD configuration
+argocd:
+  namespace: argocd
+
+# GitHub repository configuration
+github:
+  repository:
+    url: git@github.com:adiii717/k8s-gitops.git
+    name: k8s-gitops
+
+  # Authentication method: Choose ONE of the following
+  # Option 1: SSH Key (recommended for production)
+  # Provide via: --set-file github.auth.sshPrivateKey=$HOME/.ssh/id_ed25519
+  auth:
+    method: ssh  # Options: "ssh" or "token"
+    sshPrivateKey: ""
+    token: ""
+
+# Root Application configuration
+rootApplication:
+  enabled: true
+  name: root-manifest
+  project: default
+  repoURL: git@github.com:adiii717/k8s-gitops.git
+  targetRevision: main
+  path: argocd-manifest
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

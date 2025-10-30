@@ -1,0 +1,39 @@
+{{- if .Values.rootApplication.enabled }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Values.rootApplication.name }}
+  namespace: {{ .Values.argocd.namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  project: {{ .Values.rootApplication.project }}
+  source:
+    repoURL: {{ .Values.rootApplication.repoURL }}
+    targetRevision: {{ .Values.rootApplication.targetRevision }}
+    path: {{ .Values.rootApplication.path }}
+    helm:
+      releaseName: {{ .Values.rootApplication.name }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.argocd.namespace }}
+  syncPolicy:
+    automated:
+      prune: {{ .Values.rootApplication.syncPolicy.automated.prune }}
+      selfHeal: {{ .Values.rootApplication.syncPolicy.automated.selfHeal }}
+      allowEmpty: false
+    syncOptions:
+    {{- range .Values.rootApplication.syncPolicy.syncOptions }}
+      - {{ . }}
+    {{- end }}
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+{{- end }}

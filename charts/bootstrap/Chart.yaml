@@ -1,0 +1,8 @@
+apiVersion: v2
+name: bootstrap
+description: Bootstrap chart for ArgoCD initial setup (secrets and root application)
+type: application
+version: 0.1.0
+appVersion: "1.0"
+maintainers:
+  - name: adiii717
